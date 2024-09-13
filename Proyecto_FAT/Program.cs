@@ -89,7 +89,7 @@ class Program
 
         List<string> bloquesDatos = DividirEnBloques(datos);
 
-        Archivo archivo = new Archivo(nombre, datos.Length, DateTime.Now, bloquesDatos);
+        Archivo archivo = new Archivo(nombre, datos.Length, DateTime.Now, bloquesDatos, false);
         lista.Add(archivo);
 
         string jsonString = JsonSerializer.Serialize(lista);
@@ -130,7 +130,10 @@ class Program
 
             foreach (Archivo archivo in deserializedArchivos)
             {
-                archivo.MostrarInformacion();
+                if (!archivo.PapeleraReciclaje)
+                {
+                    archivo.MostrarInformacion();
+                }
             }
         }
         else
@@ -146,10 +149,13 @@ class Program
             string jsonFromFile = File.ReadAllText(ruta);
             List<Archivo> deserializedArchivos = JsonSerializer.Deserialize<List<Archivo>>(jsonFromFile)!;
 
+            // Mostrar lista de archivos
+            MostrarArchivosDisponibles(deserializedArchivos);
+
             Console.WriteLine("Ingrese el nombre del archivo a abrir:");
             string nombreArchivo = Console.ReadLine()!;
 
-            Archivo? archivo = deserializedArchivos.Find(a => a.Nombre == nombreArchivo);
+            Archivo? archivo = deserializedArchivos.Find(a => a.Nombre == nombreArchivo && !a.PapeleraReciclaje);
             if (archivo != null)
             {
                 Console.WriteLine($"Archivo: {archivo.Nombre}");
@@ -162,25 +168,160 @@ class Program
             }
             else
             {
+                Console.WriteLine("Archivo no encontrado o está en la papelera de reciclaje.");
+            }
+        }
+    }
+
+    static void ModificarArchivo(List<Archivo> lista, string ruta)
+    {
+        if (File.Exists(ruta))
+        {
+            string jsonFromFile = File.ReadAllText(ruta);
+            List<Archivo> deserializedArchivos = JsonSerializer.Deserialize<List<Archivo>>(jsonFromFile)!;
+
+            MostrarArchivosDisponibles(deserializedArchivos);
+
+            Console.WriteLine("Ingrese el nombre del archivo a modificar:");
+            string nombreArchivo = Console.ReadLine()!;
+
+            Archivo? archivo = deserializedArchivos.Find(a => a.Nombre == nombreArchivo && !a.PapeleraReciclaje);
+            if (archivo != null)
+            {
+                Console.WriteLine($"Contenido actual del archivo: {archivo.Nombre}");
+                foreach (string bloque in archivo.BloquesDatos)
+                {
+                    Console.WriteLine(bloque);
+                }
+
+                Console.WriteLine("\nIngrese el nuevo contenido (Presione ESCAPE para confirmar la modificación):");
+
+                string nuevosDatos = string.Empty;
+                ConsoleKeyInfo tecla;
+
+                // Capturar entrada de datos hasta que se presione ESCAPE
+                while ((tecla = Console.ReadKey(true)).Key != ConsoleKey.Escape)
+                {
+                    if (tecla.Key == ConsoleKey.Backspace && nuevosDatos.Length > 0)
+                    {
+                        nuevosDatos = nuevosDatos.Remove(nuevosDatos.Length - 1);
+                        Console.Write("\b \b");
+                    }
+                    else if (!char.IsControl(tecla.KeyChar))
+                    {
+                        nuevosDatos += tecla.KeyChar;
+                        Console.Write(tecla.KeyChar);
+                    }
+                }
+
+                Console.WriteLine("\n¿Desea guardar los cambios? (S/N)");
+                if (Console.ReadKey().Key == ConsoleKey.S)
+                {
+                    archivo.BloquesDatos = DividirEnBloques(nuevosDatos);
+                    archivo.Tamaño = nuevosDatos.Length;
+                    archivo.FechaModificacion = DateTime.Now;
+
+                    string jsonString = JsonSerializer.Serialize(deserializedArchivos);
+                    File.WriteAllText(ruta, jsonString);
+
+                    GuardarBloques(archivo.BloquesDatos, archivo.Nombre);
+
+                    Console.WriteLine("\nArchivo modificado correctamente.");
+                }
+                else
+                {
+                    Console.WriteLine("\nModificación cancelada.");
+                }
+            }
+            else
+            {
                 Console.WriteLine("Archivo no encontrado.");
             }
         }
     }
 
-
-    static void ModificarArchivo(List<Archivo> lista, string ruta)
-    {
-        Console.WriteLine("Modificar un archivo");
-    }
-
     static void EliminarArchivo(List<Archivo> lista, string ruta)
     {
-        Console.WriteLine("Eliminar un archivo");
+        if (File.Exists(ruta))
+        {
+            string jsonFromFile = File.ReadAllText(ruta);
+            List<Archivo> deserializedArchivos = JsonSerializer.Deserialize<List<Archivo>>(jsonFromFile)!;
+
+            MostrarArchivosDisponibles(deserializedArchivos);
+
+            Console.WriteLine("Ingrese el nombre del archivo a eliminar:");
+            string nombreArchivo = Console.ReadLine()!;
+
+            Archivo? archivo = deserializedArchivos.Find(a => a.Nombre == nombreArchivo && !a.PapeleraReciclaje);
+            if (archivo != null)
+            {
+                archivo.PapeleraReciclaje = true;
+                archivo.FechaModificacion = DateTime.Now;
+
+                string jsonString = JsonSerializer.Serialize(deserializedArchivos);
+                File.WriteAllText(ruta, jsonString);
+
+                Console.WriteLine("Archivo movido a la papelera de reciclaje.");
+            }
+            else
+            {
+                Console.WriteLine("Archivo no encontrado o ya está en la papelera de reciclaje.");
+            }
+        }
     }
 
     static void RecuperarArchivo(List<Archivo> lista, string ruta)
     {
-        Console.WriteLine("Recuperar un archivo");
+        if (File.Exists(ruta))
+        {
+            string jsonFromFile = File.ReadAllText(ruta);
+            List<Archivo> deserializedArchivos = JsonSerializer.Deserialize<List<Archivo>>(jsonFromFile)!;
+
+            MostrarArchivosEnPapelera(deserializedArchivos);
+
+            Console.WriteLine("Ingrese el nombre del archivo a recuperar:");
+            string nombreArchivo = Console.ReadLine()!;
+
+            Archivo? archivo = deserializedArchivos.Find(a => a.Nombre == nombreArchivo && a.PapeleraReciclaje);
+            if (archivo != null)
+            {
+                archivo.PapeleraReciclaje = false;
+                archivo.FechaModificacion = DateTime.Now;
+
+                string jsonString = JsonSerializer.Serialize(deserializedArchivos);
+                File.WriteAllText(ruta, jsonString);
+
+                Console.WriteLine("Archivo recuperado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Archivo no encontrado o no está en la papelera de reciclaje.");
+            }
+        }
+    }
+
+    static void MostrarArchivosDisponibles(List<Archivo> archivos)
+    {
+        Console.WriteLine("Archivos disponibles:");
+        foreach (var archivo in archivos)
+        {
+            if (!archivo.PapeleraReciclaje)
+            {
+                Console.WriteLine($"- {archivo.Nombre}");
+            }
+        }
+    }
+
+    static void MostrarArchivosEnPapelera(List<Archivo> archivos)
+    {
+        Console.WriteLine("Archivos en la papelera de reciclaje:");
+        foreach (var archivo in archivos)
+        {
+            if (archivo.PapeleraReciclaje)
+            {
+                Console.WriteLine($"- {archivo.Nombre}");
+            }
+        }
     }
 }
 

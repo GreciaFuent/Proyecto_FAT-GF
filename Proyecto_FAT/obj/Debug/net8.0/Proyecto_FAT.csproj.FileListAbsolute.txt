@@ -1,0 +1,15 @@
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\bin\Debug\net8.0\Proyecto_FAT.exe
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\bin\Debug\net8.0\Proyecto_FAT.deps.json
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\bin\Debug\net8.0\Proyecto_FAT.runtimeconfig.json
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\bin\Debug\net8.0\Proyecto_FAT.dll
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\bin\Debug\net8.0\Proyecto_FAT.pdb
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.AssemblyInfoInputs.cache
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.AssemblyInfo.cs
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.csproj.CoreCompileInputs.cache
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.sourcelink.json
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.dll
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\refint\Proyecto_FAT.dll
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.pdb
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\Proyecto_FAT.genruntimeconfig.cache
+C:\Users\greci\Segundosemestre2024\ManejoImplementacionArchivos\Proyecto_FAT-GF\Proyecto_FAT\obj\Debug\net8.0\ref\Proyecto_FAT.dll
